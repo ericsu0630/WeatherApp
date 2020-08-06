@@ -10,10 +10,9 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
-
+import android.widget.Toast;
 import org.json.JSONArray;
 import org.json.JSONObject;
-
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
@@ -67,15 +66,12 @@ public class MainActivity extends AppCompatActivity {
             }
         } catch (Exception e) {
             e.printStackTrace();
+            Toast.makeText(getApplicationContext(), "No information", Toast.LENGTH_SHORT).show();
             Log.i("Get Failed", "Something went wrong!");
         }
         InputMethodManager m = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         m.hideSoftInputFromWindow(cityTextView.getWindowToken(),0);
 
-    }
-
-    public void updateText(String jsonArray){
-        //JSONObject jo = new JSONObject(jsonArray);
     }
 
     public class GetWeather extends AsyncTask<String, Void, String> {
