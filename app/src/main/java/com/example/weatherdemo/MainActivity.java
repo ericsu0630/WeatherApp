@@ -64,13 +64,13 @@ public class MainActivity extends AppCompatActivity {
                 Log.i("JSON", w);
                 weatherText.setText(w);
             }
+            InputMethodManager m = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            m.hideSoftInputFromWindow(cityTextView.getWindowToken(),0);
         } catch (Exception e) {
             e.printStackTrace();
             Toast.makeText(getApplicationContext(), "No information", Toast.LENGTH_SHORT).show();
             Log.i("Get Failed", "Something went wrong!");
         }
-        InputMethodManager m = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        m.hideSoftInputFromWindow(cityTextView.getWindowToken(),0);
 
     }
 
