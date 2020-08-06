@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.InputStream;
@@ -17,33 +18,56 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 public class MainActivity extends AppCompatActivity {
-    TextView weatherText;
+    TextView weatherText, tempText, nameText;
     EditText cityTextView;
+    String city;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         weatherText = findViewById(R.id.weatherTextView);
+        tempText = findViewById(R.id.tempTextView);
+        nameText = findViewById(R.id.nameTextView);
     }
 
     public void checkWeather(View view){
         GetWeather weather = new GetWeather();
         cityTextView = findViewById(R.id.cityTextView);
-        String city = cityTextView.getText().toString();
+        city = cityTextView.getText().toString();
         if (city.contains(" ")) {
             city = city.replaceAll(" ", "%20"); //replaces all spaces with %20
         }
         String urlString = getString(R.string.api_url);
         urlString += city + getString(R.string.api_key);
         Log.i("URL", urlString);
-        String weatherData;
+        String allData="";
+        String clouds, temp;
         try {
-            weatherData = weather.execute(urlString).get();
-            Log.i("JSON", weatherData);
+            allData = weather.execute(urlString).get();
+            JSONObject jsonObject = new JSONObject(allData);
+            clouds = jsonObject.getString("weather");
+            city = jsonObject.getString("name");
+            nameText.setText(city);
+            jsonObject = jsonObject.getJSONObject("main");
+            temp = jsonObject.getString("temp");
+            double tempDouble = Double.parseDouble(temp);
+            tempDouble -= 273.15;
+            temp = String.format("%.1f", tempDouble);
+            temp += "ºC";
+            Log.i("JSON", temp);
+            tempText.setText(temp);
+            JSONArray cloudArray = new JSONArray(clouds);
+            for(int i=0;i<cloudArray.length();i++){
+                JSONObject part = cloudArray.getJSONObject(i);
+                String w = part.getString("description");
+                Log.i("JSON", w);
+                weatherText.setText(w);
+            }
         } catch (Exception e) {
             e.printStackTrace();
             Log.i("Get Failed", "Something went wrong!");
         }
+
     }
 
     public void updateText(String jsonArray){
