@@ -2,10 +2,12 @@ package com.example.weatherdemo;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -67,6 +69,8 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
             Log.i("Get Failed", "Something went wrong!");
         }
+        InputMethodManager m = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        m.hideSoftInputFromWindow(cityTextView.getWindowToken(),0);
 
     }
 
